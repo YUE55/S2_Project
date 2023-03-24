@@ -9,7 +9,6 @@ def forecast_narx(DATA):
     from keras.callbacks import EarlyStopping
     # DATA: 8-column matrix (0-date, 1-hour, 2-price, 3-load forecast, 4-Sat, 5-Sun, 6-Mon 7-dummy, 8-p_min)
     # select data to be used
-    # print(DATA[-1, :])
     price = DATA[:-1, 2]             # For day d (d-1, ...)
     price_min = DATA[:-1, 7]         # For day d
     Dummies = DATA[1:, 4:7]          # Dummies for day d+1
@@ -39,8 +38,7 @@ def forecast_narx(DATA):
     model.fit(X, y, batch_size=64, epochs=500, verbose=0, # Fit to data
               validation_split=0, shuffle=False, callbacks=callbacks)
     prog = model.predict(np.array(X_fut, ndmin=2))        # Compute a step-ahead forecast
-
-    return np.exp(prog + mc)                     # Convert to price level
+    return np.exp(prog + mc)        # Convert to price level
 
 def epf_narx(data, Ndays, startd, endd):
     # DATA:   4-column matrix (date, hour, price, load forecast)
